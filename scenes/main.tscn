@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dchy1wbnfwttv"]
+
+[ext_resource type="PackedScene" uid="uid://6yhsdjs658bw" path="res://scenes/main_ui.tscn" id="1_1p533"]
+[ext_resource type="PackedScene" uid="uid://c18yay2mbas18" path="res://scenes/canvas_container.tscn" id="2_gmykr"]
+
+[node name="main" type="Node2D"]
+
+[node name="CanvasContainer" parent="." instance=ExtResource("2_gmykr")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="mainUI" parent="CanvasLayer" instance=ExtResource("1_1p533")]
+mouse_filter = 2
