@@ -40,8 +40,10 @@ func simple_zoom(delta):
 	zoom = zoom.slerp(zoomTarget, zoomSpeed * delta)
 	if updateCanvasDynamically:
 		stroke_manager.queue_redraw()
+	
+	Manager.zoom_level = zoom
 
-func click_and_drag(delta):
+func click_and_drag(_delta):
 	if(!isDragging and Input.is_action_just_pressed("camera_dragging")):
 		dragStartCameraPos = position
 		dragStartMousePos = get_viewport().get_mouse_position()

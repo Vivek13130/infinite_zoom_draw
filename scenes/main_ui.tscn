@@ -1,23 +1,37 @@
 [gd_scene load_steps=19 format=3 uid="uid://6yhsdjs658bw"]
 
-[ext_resource type="Texture2D" uid="uid://dv2ec6brr365e" path="res://assets/menu-burger.png" id="1_4yc7i"]
 [ext_resource type="Script" uid="uid://bap3rwp3w1rtd" path="res://scripts/main_ui.gd" id="1_j03cv"]
-[ext_resource type="Texture2D" uid="uid://dk5hl350lxuua" path="res://assets/lock.png" id="2_nqlxj"]
-[ext_resource type="Texture2D" uid="uid://dtrherwebgh06" path="res://assets/hand-paper.png" id="3_im5gw"]
-[ext_resource type="Texture2D" uid="uid://burd0r7mu1mob" path="res://assets/cursor.png" id="4_ernbd"]
 [ext_resource type="Texture2D" uid="uid://bkewnc06n7riy" path="res://assets/square.png" id="5_04ii5"]
 [ext_resource type="Texture2D" uid="uid://cdl3s1tdvf5ws" path="res://assets/circle.png" id="6_2dtwi"]
-[ext_resource type="Texture2D" uid="uid://c6uor7wv6gwvq" path="res://assets/arrow-right.png" id="7_cyq4c"]
 [ext_resource type="Texture2D" uid="uid://x53t3ihwvfnc" path="res://assets/slash.png" id="8_oy4xx"]
 [ext_resource type="Texture2D" uid="uid://y61g54udgkih" path="res://assets/attribution-pencil.png" id="9_3soa0"]
+[ext_resource type="Texture2D" uid="uid://dmtn2yny37wsx" path="res://assets/triangle (2).png" id="10_u04fh"]
 [ext_resource type="Texture2D" uid="uid://bnp204p6yaeh8" path="res://assets/add-image.png" id="10_uqbw1"]
 [ext_resource type="Texture2D" uid="uid://bjetncpeahfvl" path="res://assets/eraser.png" id="11_2k2lt"]
-[ext_resource type="Texture2D" uid="uid://cg8ynwl17gywo" path="res://assets/text.png" id="12_koido"]
+[ext_resource type="Texture2D" uid="uid://ctf2505os11ew" path="res://assets/marker.png" id="13_u04fh"]
 [ext_resource type="Texture2D" uid="uid://d0jpi3mttqj2r" path="res://assets/minus-small.png" id="13_x0frv"]
+[ext_resource type="Texture2D" uid="uid://gj4i2rxsxy8y" path="res://assets/particle (1).png" id="14_ulqfl"]
 [ext_resource type="Texture2D" uid="uid://dmng7v75ost36" path="res://assets/plus.png" id="14_xr872"]
 [ext_resource type="Texture2D" uid="uid://cluiq5dc3f33g" path="res://assets/undo-alt.png" id="15_dl3nv"]
-[ext_resource type="Texture2D" uid="uid://4ta0m8jmaeee" path="res://assets/shield-check (1).png" id="16_o2eig"]
-[ext_resource type="Texture2D" uid="uid://c7r7lk7b3kp6s" path="res://assets/info.png" id="17_0gx7v"]
+[ext_resource type="Texture2D" uid="uid://cjm5apelln5x6" path="res://assets/particle.png" id="15_j03cv"]
+[ext_resource type="Texture2D" uid="uid://b355jsrl8u1qq" path="res://assets/particle (2).png" id="16_rbpqj"]
+[ext_resource type="PackedScene" uid="uid://y2juuwoxenhg" path="res://scenes/color_picker.tscn" id="19_rbpqj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rbpqj"]
+bg_color = Color(0, 0, 1, 0.352941)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hst8y"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 1, 1)
+border_blend = true
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
 
 [node name="mainUI" type="Control"]
 layout_mode = 3
@@ -26,8 +40,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_j03cv")
-metadata/_edit_lock_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -36,134 +50,71 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
+theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
-metadata/_edit_lock_ = true
-
-[node name="topStrip" type="HBoxContainer" parent="MarginContainer"]
-layout_mode = 2
-size_flags_vertical = 0
-
-[node name="MenuButton" type="PanelContainer" parent="MarginContainer/topStrip"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/topStrip/MenuButton"]
-layout_mode = 2
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 3
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 3
-
-[node name="MenuButton" type="MenuButton" parent="MarginContainer/topStrip/MenuButton/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-icon = ExtResource("1_4yc7i")
-
-[node name="Control" type="Control" parent="MarginContainer/topStrip"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="drawingToolsContainer" type="PanelContainer" parent="MarginContainer/topStrip"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/topStrip/drawingToolsContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 5
-
-[node name="drawing_tools" type="HBoxContainer" parent="MarginContainer/topStrip/drawingToolsContainer/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.0
-theme_override_constants/separation = 21
-
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/topStrip/drawingToolsContainer/MarginContainer/drawing_tools"]
-layout_mode = 2
-texture_normal = ExtResource("2_nqlxj")
-stretch_mode = 5
-
-[node name="TextureButton2" type="TextureButton" parent="MarginContainer/topStrip/drawingToolsContainer/MarginContainer/drawing_tools"]
-layout_mode = 2
-texture_normal = ExtResource("3_im5gw")
-stretch_mode = 5
-
-[node name="VSeparator" type="VSeparator" parent="MarginContainer/topStrip/drawingToolsContainer/MarginContainer/drawing_tools"]
-layout_mode = 2
-
-[node name="TextureButton3" type="TextureButton" parent="MarginContainer/topStrip/drawingToolsContainer/MarginContainer/drawing_tools"]
-layout_mode = 2
-texture_normal = ExtResource("4_ernbd")
-stretch_mode = 5
-
-[node name="TextureButton4" type="TextureButton" parent="MarginContainer/topStrip/drawingToolsContainer/MarginContainer/drawing_tools"]
-layout_mode = 2
-texture_normal = ExtResource("5_04ii5")
-stretch_mode = 5
-
-[node name="TextureButton5" type="TextureButton" parent="MarginContainer/topStrip/drawingToolsContainer/MarginContainer/drawing_tools"]
-layout_mode = 2
-texture_normal = ExtResource("6_2dtwi")
-stretch_mode = 5
-
-[node name="TextureButton6" type="TextureButton" parent="MarginContainer/topStrip/drawingToolsContainer/MarginContainer/drawing_tools"]
-layout_mode = 2
-texture_normal = ExtResource("7_cyq4c")
-stretch_mode = 5
-
-[node name="TextureButton7" type="TextureButton" parent="MarginContainer/topStrip/drawingToolsContainer/MarginContainer/drawing_tools"]
-layout_mode = 2
-texture_normal = ExtResource("8_oy4xx")
-stretch_mode = 5
-
-[node name="TextureButton8" type="TextureButton" parent="MarginContainer/topStrip/drawingToolsContainer/MarginContainer/drawing_tools"]
-layout_mode = 2
-texture_normal = ExtResource("9_3soa0")
-stretch_mode = 5
-
-[node name="TextureButton9" type="TextureButton" parent="MarginContainer/topStrip/drawingToolsContainer/MarginContainer/drawing_tools"]
-layout_mode = 2
-texture_normal = ExtResource("10_uqbw1")
-stretch_mode = 5
-
-[node name="TextureButton10" type="TextureButton" parent="MarginContainer/topStrip/drawingToolsContainer/MarginContainer/drawing_tools"]
-layout_mode = 2
-texture_normal = ExtResource("11_2k2lt")
-stretch_mode = 5
-
-[node name="TextureButton11" type="TextureButton" parent="MarginContainer/topStrip/drawingToolsContainer/MarginContainer/drawing_tools"]
-layout_mode = 2
-texture_normal = ExtResource("12_koido")
-stretch_mode = 5
-
-[node name="Control2" type="Control" parent="MarginContainer/topStrip"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="shareFiles" type="HBoxContainer" parent="MarginContainer/topStrip"]
-layout_mode = 2
-
-[node name="ShareButton" type="Button" parent="MarginContainer/topStrip/shareFiles"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-text = "Share"
-
-[node name="FilesButton" type="Button" parent="MarginContainer/topStrip/shareFiles"]
-layout_mode = 2
-text = "Files"
+theme_override_constants/margin_bottom = 10
 
 [node name="bottomStrip" type="HBoxContainer" parent="MarginContainer"]
 layout_mode = 2
+size_flags_horizontal = 8
 size_flags_vertical = 8
+mouse_filter = 0
 
 [node name="leftSideControls" type="HBoxContainer" parent="MarginContainer/bottomStrip"]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 8
 theme_override_constants/separation = 30
+
+[node name="renderCalls" type="PanelContainer" parent="MarginContainer/bottomStrip/leftSideControls"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/bottomStrip/leftSideControls/renderCalls"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/bottomStrip/leftSideControls/renderCalls/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MarginContainer/bottomStrip/leftSideControls/renderCalls/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Re-render calls : "
+
+[node name="undoRedo" type="PanelContainer" parent="MarginContainer/bottomStrip/leftSideControls"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/bottomStrip/leftSideControls/undoRedo"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/bottomStrip/leftSideControls/undoRedo/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="TextureButton2" type="TextureButton" parent="MarginContainer/bottomStrip/leftSideControls/undoRedo/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+texture_normal = ExtResource("15_dl3nv")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer/bottomStrip/leftSideControls/undoRedo/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+texture_normal = ExtResource("15_dl3nv")
+ignore_texture_size = true
+stretch_mode = 5
+flip_h = true
 
 [node name="zoomControls" type="PanelContainer" parent="MarginContainer/bottomStrip/leftSideControls"]
 layout_mode = 2
@@ -201,86 +152,199 @@ texture_normal = ExtResource("14_xr872")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="undoRedo" type="PanelContainer" parent="MarginContainer/bottomStrip/leftSideControls"]
+[node name="drawingToolsContainer" type="PanelContainer" parent="MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_rbpqj")
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/bottomStrip/leftSideControls/undoRedo"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/drawingToolsContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/bottomStrip/leftSideControls/undoRedo/MarginContainer"]
+[node name="MainContainer" type="VBoxContainer" parent="MarginContainer/drawingToolsContainer/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 15
+theme_override_constants/separation = 10
 
-[node name="TextureButton2" type="TextureButton" parent="MarginContainer/bottomStrip/leftSideControls/undoRedo/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(26, 26)
+[node name="BrushTools" type="VBoxContainer" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer"]
 layout_mode = 2
-texture_normal = ExtResource("15_dl3nv")
-ignore_texture_size = true
-stretch_mode = 5
 
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/bottomStrip/leftSideControls/undoRedo/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(26, 26)
+[node name="Label2" type="Label" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
 layout_mode = 2
-texture_normal = ExtResource("15_dl3nv")
-ignore_texture_size = true
-stretch_mode = 5
-flip_h = true
+text = "Brushes : "
 
-[node name="renderCalls" type="PanelContainer" parent="MarginContainer/bottomStrip/leftSideControls"]
+[node name="brushesDropDown" type="OptionButton" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
 layout_mode = 2
-size_flags_horizontal = 0
+selected = 0
+item_count = 3
+popup/item_0/text = "Pencil"
+popup/item_0/icon = ExtResource("9_3soa0")
+popup/item_0/id = 0
+popup/item_1/text = "Highlighter"
+popup/item_1/icon = ExtResource("13_u04fh")
+popup/item_1/id = 1
+popup/item_2/text = "NONE"
+popup/item_2/id = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/bottomStrip/leftSideControls/renderCalls"]
+[node name="Label4" type="Label" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 5
+text = "Brush Effects :  "
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/bottomStrip/leftSideControls/renderCalls/MarginContainer"]
+[node name="brushEffectDropDown" type="OptionButton" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
 layout_mode = 2
-theme_override_constants/separation = 15
+selected = 4
+item_count = 5
+popup/item_0/text = "Spiky lines"
+popup/item_0/id = 1
+popup/item_1/text = "bad brush"
+popup/item_1/id = 2
+popup/item_2/text = "Smooth-bezier"
+popup/item_2/id = 3
+popup/item_3/text = "Smooth-catmull-rom"
+popup/item_3/id = 4
+popup/item_4/text = "NONE"
+popup/item_4/id = 4
 
-[node name="Label" type="Label" parent="MarginContainer/bottomStrip/leftSideControls/renderCalls/MarginContainer/HBoxContainer"]
+[node name="Label5" type="Label" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
 layout_mode = 2
-text = "Re-render calls : "
+text = "Brush Size :"
 
-[node name="uselessNode" type="Control" parent="MarginContainer/bottomStrip"]
+[node name="HSlider2" type="HSlider" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
+layout_mode = 2
+
+[node name="Label6" type="Label" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
+layout_mode = 2
+text = "Brush Transparency:"
+
+[node name="HSlider3" type="HSlider" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+ticks_on_borders = true
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxFlat_hst8y")
+
+[node name="ColorPicker" type="HBoxContainer" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ColorPicker"]
+layout_mode = 2
+text = "Color : "
+
+[node name="ColorPickerButton" type="TextureButton" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ColorPicker"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="rightSideControls" type="HBoxContainer" parent="MarginContainer/bottomStrip"]
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_constants/separation = 15
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ColorPicker/ColorPickerButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_filter = 2
 
-[node name="securityInfo" type="PanelContainer" parent="MarginContainer/bottomStrip/rightSideControls"]
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxFlat_hst8y")
+
+[node name="ShapeTools" type="VBoxContainer" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
+layout_mode = 2
+text = "Shape : "
+
+[node name="shapesDropDown" type="OptionButton" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
+layout_mode = 2
+selected = 5
+item_count = 6
+popup/item_0/text = "Triangle"
+popup/item_0/icon = ExtResource("10_u04fh")
+popup/item_0/id = 0
+popup/item_1/text = "Square"
+popup/item_1/icon = ExtResource("5_04ii5")
+popup/item_1/id = 1
+popup/item_2/text = "Line"
+popup/item_2/icon = ExtResource("8_oy4xx")
+popup/item_2/id = 2
+popup/item_3/text = "Circle"
+popup/item_3/icon = ExtResource("6_2dtwi")
+popup/item_3/id = 3
+popup/item_4/text = "Rectangle"
+popup/item_4/icon = ExtResource("5_04ii5")
+popup/item_4/id = 4
+popup/item_5/text = "NONE"
+popup/item_5/id = 5
+
+[node name="Label3" type="Label" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
+layout_mode = 2
+text = "Shape Effects : "
+
+[node name="shapeEffectDropDown" type="OptionButton" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
+layout_mode = 2
+selected = 3
+item_count = 4
+popup/item_0/text = "Sprinkler-1"
+popup/item_0/icon = ExtResource("14_ulqfl")
+popup/item_0/id = 0
+popup/item_1/text = "Sprinkler-2"
+popup/item_1/icon = ExtResource("15_j03cv")
+popup/item_1/id = 1
+popup/item_2/text = "Sprinkler-3"
+popup/item_2/icon = ExtResource("16_rbpqj")
+popup/item_2/id = 2
+popup/item_3/text = "NONE"
+popup/item_3/id = 3
+
+[node name="Label2" type="Label" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
+layout_mode = 2
+text = "Spawn Radius :"
+
+[node name="HSlider" type="HSlider" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/bottomStrip/rightSideControls/securityInfo"]
+[node name="Label4" type="Label" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_right = 8
+text = "Spawn Density :"
 
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/bottomStrip/rightSideControls/securityInfo/MarginContainer"]
+[node name="HSlider2" type="HSlider" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
 layout_mode = 2
-texture_normal = ExtResource("16_o2eig")
+
+[node name="HSeparator4" type="HSeparator" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxFlat_hst8y")
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 10
+columns = 3
+
+[node name="TextureButton9" type="TextureButton" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/GridContainer"]
+layout_mode = 2
+texture_normal = ExtResource("10_uqbw1")
 stretch_mode = 5
 
-[node name="InfoPlatform" type="PanelContainer" parent="MarginContainer/bottomStrip/rightSideControls"]
+[node name="TextureButton10" type="TextureButton" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/GridContainer"]
 layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/bottomStrip/rightSideControls/InfoPlatform"]
-layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_right = 8
-
-[node name="TextureButton" type="TextureButton" parent="MarginContainer/bottomStrip/rightSideControls/InfoPlatform/MarginContainer"]
-layout_mode = 2
-texture_normal = ExtResource("17_0gx7v")
+texture_normal = ExtResource("11_2k2lt")
 stretch_mode = 5
+
+[node name="ColorPickerContainer" parent="." instance=ExtResource("19_rbpqj")]
+visible = false
+layout_mode = 0
+
+[connection signal="item_selected" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushesDropDown" to="." method="_on_brushes_drop_down_item_selected"]
+[connection signal="item_selected" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushEffectDropDown" to="." method="_on_brushes_drop_down_item_selected"]
+[connection signal="pressed" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ColorPicker/ColorPickerButton" to="." method="_on_color_picker_button_pressed"]
+[connection signal="item_selected" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools/shapesDropDown" to="." method="_on_shapes_drop_down_item_selected"]
+[connection signal="item_selected" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools/shapeEffectDropDown" to="." method="_on_shape_effect_drop_down_item_selected"]

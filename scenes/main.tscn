@@ -10,4 +10,5 @@
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="mainUI" parent="CanvasLayer" instance=ExtResource("1_1p533")]
-mouse_filter = 2
+z_index = 999
+mouse_filter = 0

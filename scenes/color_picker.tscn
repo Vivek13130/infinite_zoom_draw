@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://y2juuwoxenhg"]
+
+[ext_resource type="Script" uid="uid://bmmd5go5ipln6" path="res://scripts/color_picker.gd" id="1_xt0lc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xt0lc"]
+bg_color = Color(0.85098, 1, 1, 0.611765)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.249966, 0.889357, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="ColorPickerContainer" type="PanelContainer"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_xt0lc")
+script = ExtResource("1_xt0lc")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ColorPicker" type="GridContainer" parent="MarginContainer"]
+layout_mode = 2
+columns = 6

@@ -1,12 +1,5 @@
 extends Node2D
 
-# added optimizations but removed them . 
-
-# responsiblity : 
-# registering new stroke 
-# managing old strokes
-# hashing and rendering only visible strokes 
-# defining grid 
 
 var grid_size = Manager.grid_size # grid size in px 
 
@@ -21,21 +14,27 @@ var strokes : Array = [] # stores all completed strokes with other info as well
 	#}
 #]
 
+var curve_segments = 10
 
 var current_stroke = [] # stores the current stroke points 
 var previous_mouse_pos : Vector2 = Vector2.ZERO # just to check if mouse is at a new position
 @onready var camera: Camera2D = $"../Camera2D"
 
-@export var base_stroke_width = 2.0 
-var current_stroke_color = PackedColorArray()
+@export var pencil_base_stroke_width = 20.0 
+@export var highlighter_base_stroke_width = 30.0
+@export var highlighter_color_transparency = 0.2
+
+var current_stroke_color = PackedColorArray() 
 
 
-func _ready() -> void:
-	pass # Replace with function body.
 
 
 func _process(delta: float) -> void:
-	handleDrawing()
+	if(Manager.brush_type != "None"):
+		handleDrawing()
+	
+	if(Manager.shape_type != "None"):
+		handleShapes()
 
 
 func handleDrawing():
@@ -60,118 +59,165 @@ func handleDrawing():
 			
 	
 	if Input.is_action_just_released("click"): # pushing it in storage
+		
 		if current_stroke.size() > 1 : 
+			var picked_color = Color(Manager.picked_color) # creating a copy , no direct reference
+			var stroke_width
 			
+			if(Manager.brush_type == "Pencil"):
+				stroke_width = pencil_base_stroke_width
+				
+			elif(Manager.brush_type == "Highlighter"):
+				picked_color.a = highlighter_color_transparency
+				stroke_width = highlighter_base_stroke_width
+				print(picked_color)
 			
-			#print("stroke no : ", strokes.size() + 1)
-			#print("size : " , current_stroke.size())
-			#print(current_stroke)
-			#print()
+			#var smoothed_points = get_quadratic_bezier_points(current_stroke, curve_segments)
+			var smoothed_points = get_catmull_rom_points(current_stroke, curve_segments)
 			
 			var new_stroke = {
-				"stroke_points" : current_stroke.duplicate(), # we don't need any references of it
-				"stroke_color" : current_stroke_color,
-				"stroke_width" :  base_stroke_width / camera.zoom.x,
+				"stroke_points" : smoothed_points, # we don't need any references of it
+				"stroke_color" : PackedColorArray([picked_color]),
+				"stroke_width" :  stroke_width / camera.zoom.x,
 			}
 			
 			strokes.append(new_stroke)
-			update_canvas()
-			
-			
-			#THIS COMMENTED IS CODE IS RELATED TO OPTIMIZATIONS : 
-			
-			## calculate the grid cell from this start pos
-			#var respective_grid_row = int(floor(float(start_pos.y) / grid_size.y))
-			#var respective_grid_col = int(floor(float(start_pos.x) / grid_size.x))
-			#
-			## generate a key based on grid cell position of this stroke
-			## cell(1 ,3) = 1_3
-			#var grid_cell_key = str(respective_grid_row) + "_" + str(respective_grid_col) 
-			#print("grid cell key for this stroke : " , grid_cell_key)
-			#
-			#var bounding_box_top_left : Vector2 = Vector2.INF # stores min x and min y value among all points in stroke
-			#var bounding_box_bottom_right : Vector2 = Vector2(-INF , -INF) # stores max x and max y value among all points in stroke
-			#
-			#for point in current_stroke : 
-				#bounding_box_top_left.x = min(point.x , bounding_box_top_left.x)
-				#bounding_box_top_left.y = min(point.y , bounding_box_top_left.y)
-				#bounding_box_bottom_right.x = max(point.x , bounding_box_bottom_right.x)
-				#bounding_box_bottom_right.y = max(point.y , bounding_box_bottom_right.y)
-			#
-			#
-			#var new_stroke = {
-				#"stroke_points" : current_stroke.duplicate(), # we don't need any references of it
-				#"stroke_color" : current_stroke_color,
-				#"stroke_width" :  base_stroke_width / camera.zoom.x,
-				#"bounding_rect" : Rect2(bounding_box_top_left, abs(bounding_box_bottom_right - bounding_box_top_left))
-			#}
-			#
-			#print("new stroke registered in : ", grid_cell_key)
-			#print(new_stroke["bounding_rect"])
-			
-			#if(strokes.has(grid_cell_key)):
-				#strokes[grid_cell_key].append(new_stroke)
-			#else:
-				#strokes[grid_cell_key] = [] # empty list for storing all strokes 
-				#strokes[grid_cell_key].append(new_stroke)
-			
+			queue_redraw()
 
 
-func update_canvas():
-	queue_redraw()
+func handleShapes() -> void : 
+	pass
+
 
 func _draw() -> void:
 	Manager.queue_redraw_calls += 1
 	
+	for stroke in strokes: # drawing all strokes in storage 
+		draw_polyline_colors(stroke["stroke_points"], stroke["stroke_color"] , stroke["stroke_width"], true)
+	
+	
 	# drawing the current stroke
 	if current_stroke.size() > 1 : 
-		draw_polyline_colors(current_stroke, PackedColorArray([Color.YELLOW]) , base_stroke_width / camera.zoom.x, true)
-	
-	for stroke in strokes:
-		draw_polyline_colors(stroke["stroke_points"], stroke["stroke_color"] , stroke["stroke_width"], true)
+		var stroke_width
+		var picked_color = Color(Manager.picked_color)
 		
-	
-	## get the camera rect : 
-	#var camera_rect: Rect2 = Rect2( 
-		#camera.get_position() - get_viewport_rect().size / 2 / camera.zoom, 
-		#get_viewport_rect().size / camera.zoom )
-	#
-	#draw_rect(camera_rect, Color.YELLOW, false, 2)	
-	
-	#drawing registered strokes : 
-	#for grid_cell in strokes:
-		#var underscore = true
-		#var row_col = grid_cell.split("_")
-		#
-		#var cell_rect = Rect2( Vector2(int(row_col[0]) * grid_size.y , int(row_col[1]) * grid_size.x), grid_size)
-		#draw_rect(cell_rect, Color.BLUE , false , 2)
-		#
-		## this cell is completely inside camera : 
-		#if camera_rect.encloses(cell_rect): 
-			## render all strokes 
-			#for stroke in strokes[grid_cell]:
-			## now stroke is a dictionary : stroke_points, stroke_color, stroke_width, bounding_rect
-				#draw_polyline_colors(stroke["stroke_points"], stroke["stroke_color"] , stroke["stroke_width"], true)
-				#draw_rect(stroke["bounding_rect"], Color.GREEN, false)
-		#
-		## this stroke is partially overlapping camera
-		#elif camera_rect.intersects(cell_rect):
-			## use bounding box and render only overlapping strokes 
-			#for stroke in strokes[grid_cell]:
-				#if camera_rect.intersects(stroke["bounding_rect"]):
-					#draw_polyline_colors(stroke["stroke_points"], stroke["stroke_color"] , stroke["stroke_width"], true)
-				#else:
-					#draw_polyline_colors(stroke["stroke_points"], PackedColorArray([Color(1,0,0)]) , stroke["stroke_width"], true)
-		#
-		## this cell is completely outside the camera 
-		#else:
-			#for stroke in strokes[grid_cell]:
-				#draw_polyline_colors(stroke["stroke_points"], PackedColorArray([Color(1,0,0)]) , stroke["stroke_width"], true)
-				
+		if(Manager.brush_type == "Pencil"):
+			stroke_width = pencil_base_stroke_width
+			
+		elif(Manager.brush_type == "Highlighter"):
+			stroke_width = highlighter_base_stroke_width
+			picked_color.a = highlighter_color_transparency
 		
-		# check if this cell is in camera rect or not 
-		# if yes : check if it's fully in or partially in
-		# if partially , use the bounding box thing 
-		# otherwise render all strokes in it 
-		#draw_polyline_colors(stroke_dict["stroke_points"], stroke_dict["stroke_color"] , stroke_dict["stroke_width"], true)
+		#var smoothed_points = get_quadratic_bezier_points(current_stroke, curve_segments)
+		var smoothed_points = get_catmull_rom_points(current_stroke, curve_segments)
+		draw_polyline(smoothed_points, picked_color, stroke_width / camera.zoom.x, true)
+		#draw_polyline_colors(current_stroke, PackedColorArray([picked_color]) , stroke_width / camera.zoom.x, true)
 	
+	
+
+
+func get_quadratic_bezier_points(points: PackedVector2Array, segments : int) -> PackedVector2Array:
+	var bezier_points = PackedVector2Array()
+	for i in range(1, points.size() - 1):
+		var p0 = points[i - 1]
+		var p1 = points[i]
+		var p2 = points[i + 1]
+
+		for t in range(segments + 1):
+			var t_norm = float(t) / float(segments)
+			var a = p0.lerp(p1, t_norm)
+			var b = p1.lerp(p2, t_norm)
+			var point = a.lerp(b, t_norm)
+			bezier_points.append(point)
+	return bezier_points
+
+
+func get_catmull_rom_points(points: PackedVector2Array, segments: int ) -> PackedVector2Array:
+	var smoothed_points = PackedVector2Array()
+	for i in range(points.size() - 1):
+		var p0 = points[max(i - 1, 0)]
+		var p1 = points[i]
+		var p2 = points[i + 1]
+		var p3 = points[min(i + 2, points.size() - 1)]
+
+		for t in range(segments + 1):
+			var t_norm = float(t) / float(segments)
+			var t2 = t_norm * t_norm
+			var t3 = t2 * t_norm
+
+			var x = 0.5 * (
+				2.0 * p1.x +
+				(-p0.x + p2.x) * t_norm +
+				(2.0 * p0.x - 5.0 * p1.x + 4.0 * p2.x - p3.x) * t2 +
+				(-p0.x + 3.0 * p1.x - 3.0 * p2.x + p3.x) * t3
+			)
+
+			var y = 0.5 * (
+				2.0 * p1.y +
+				(-p0.y + p2.y) * t_norm +
+				(2.0 * p0.y - 5.0 * p1.y + 4.0 * p2.y - p3.y) * t2 +
+				(-p0.y + 3.0 * p1.y - 3.0 * p2.y + p3.y) * t3
+			)
+
+			smoothed_points.append(Vector2(x, y))
+	return smoothed_points
+
+
+func get_catmull_rom_points_improved(points: PackedVector2Array, segments: int ) -> PackedVector2Array:
+	var smoothed_points = PackedVector2Array()
+	
+	for i in range(points.size() - 1):
+		var p0 = points[max(i - 1, 0)]
+		var p1 = points[i]
+		var p2 = points[min(i + 1, points.size() - 1)]
+		var p3 = points[min(i + 2, points.size() - 1)]
+
+		for t in range(segments + 1):
+			var t_norm = float(t) / float(segments)
+			var t2 = t_norm * t_norm
+			var t3 = t2 * t_norm
+
+			var x = 0.5 * (
+				2.0 * p1.x +
+				(-p0.x + p2.x) * t_norm +
+				(2.0 * p0.x - 5.0 * p1.x + 4.0 * p2.x - p3.x) * t2 +
+				(-p0.x + 3.0 * p1.x - 3.0 * p2.x + p3.x) * t3
+			)
+
+			var y = 0.5 * (
+				2.0 * p1.y +
+				(-p0.y + p2.y) * t_norm +
+				(2.0 * p0.y - 5.0 * p1.y + 4.0 * p2.y - p3.y) * t2 +
+				(-p0.y + 3.0 * p1.y - 3.0 * p2.y + p3.y) * t3
+			)
+
+			smoothed_points.append(Vector2(x, y))
+	
+	return smoothed_points
+
+
+func get_cubic_bezier_points(points: PackedVector2Array, segments: int) -> PackedVector2Array:
+	var bezier_points = PackedVector2Array()
+
+	for i in range(points.size() - 3):
+		var p0 = points[i]
+		var p1 = points[i + 1]
+		var p2 = points[i + 2]
+		var p3 = points[i + 3]
+
+		for t in range(segments + 1):
+			var t_norm = float(t) / float(segments)
+			var t2 = t_norm * t_norm
+			var t3 = t2 * t_norm
+
+			var x = ((1 - t_norm) * (1 - t_norm) * (1 - t_norm) * p0.x + 
+					3 * (1 - t_norm) * (1 - t_norm) * t_norm * p1.x +
+					3 * (1 - t_norm) * t_norm * t_norm * p2.x + t3 * p3.x )
+
+			var y = ((1 - t_norm) * (1 - t_norm) * (1 - t_norm) * p0.y +
+					3 * (1 - t_norm) * (1 - t_norm) * t_norm * p1.y +
+					3 * (1 - t_norm) * t_norm * t_norm * p2.y + t3 * p3.y)
+
+			bezier_points.append(Vector2(x, y))
+	
+	return bezier_points
