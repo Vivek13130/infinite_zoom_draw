@@ -1,78 +1,43 @@
 extends Node2D
-@onready var camera: Camera2D = $Camera2D
-
-var strokes = [] # stores all completed strokes with other info as well 
-# it is a list of dictionaries
-
-# dict structure : 
-#{
-	#stroke_points : []
-	#stroke_color : PackedColorArray()
-	#stroke_width : adjusted width at that time
-#}
-
-# each element is another array of points 
-
-var current_stroke = [] # stores the current stroke points 
-var previous_mouse_pos : Vector2 = Vector2.ZERO # just to check if mouse is at a new position
-
-@export var base_stroke_width = 2.0 
-var current_stroke_color = PackedColorArray()
 
 
-func _ready() -> void:
-	# at present we are only using one color here.
-	current_stroke_color.fill(Color.GREEN_YELLOW)
 
 
-func _process(delta: float) -> void:
-	handleDrawing()
 
 
-func handleDrawing():
-	if Input.is_action_just_pressed("click"): # started registering a new stroke 
-		current_stroke = [] # empty it out for a new stroke 
-		var mouse_pos = camera.get_global_mouse_position()
-		current_stroke.append(mouse_pos) 
-		previous_mouse_pos = mouse_pos
-		# it should be taken in reference to camera 
-		
-	
-		
-	if Input.is_action_pressed("click") : # registering all points in stroke 
-		var current_mouse_pos = camera.get_global_mouse_position()
-		if(current_mouse_pos != previous_mouse_pos):
-			current_stroke.append(current_mouse_pos)
-			previous_mouse_pos = current_mouse_pos
-			
-	
-	if Input.is_action_just_released("click"): # pushing it in storage
-		if current_stroke.size() > 1 : 
-			
-			print("stroke no : ", strokes.size() + 1)
-			print("size : " , current_stroke.size())
-			print(current_stroke)
-			print()
-			
-			var new_stroke = {
-				"stroke_points" : current_stroke.duplicate(), # we don't need any references of it
-				"stroke_color" : current_stroke_color,
-				"stroke_width" :  base_stroke_width / camera.zoom.x
-			}
-			
-			strokes.append(new_stroke)
-			update_canvas()
-			
-		current_stroke = []
+#responsibility : 
+# draw grid for debugging : 
 
 
-func update_canvas():
-	queue_redraw()
+#THIS COMMENTED CODE WAS RELATED TO DRAWING GRID ON SCREEN , BUT WE DON'T NEED THIS 
+# Grid settings
+#var grid_size: Vector2 = Manager.grid_size # Size of each grid cell
+#var line_color: Color = Color(0.5, 0, 0, 0.5) # Light red with transparency
+#var line_width: float = 1.0
 
-func _draw() -> void:
-	
-	#drawing completed strokes : 
-	for stroke_dict in strokes:
-		#print(stroke_dict)
-		draw_polyline_colors(stroke_dict["stroke_points"], stroke_dict["stroke_color"] , stroke_dict["stroke_width"], true)
-	
+# reference to the camera to adjust grid with zoom/pan
+#@onready var camera: Camera2D = $Camera2D
+
+#func _process(delta: float) -> void:
+	#queue_redraw() # continuously redraw the grid
+#
+#func _draw() -> void:
+	#if not camera:
+		#return
+	#
+	## Get the visible area of the camera
+	#var screen_rect: Rect2 = Rect2(camera.get_position() - get_viewport_rect().size / 2 / camera.zoom, get_viewport_rect().size / camera.zoom)
+	#
+	## Calculate grid bounds
+	#var start_x: float = floor(screen_rect.position.x / grid_size.x) * grid_size.x
+	#var end_x: float = floor((screen_rect.position.x + screen_rect.size.x) / grid_size.x) * grid_size.x
+	#var start_y: float = floor(screen_rect.position.y / grid_size.y) * grid_size.y
+	#var end_y: float = floor((screen_rect.position.y + screen_rect.size.y) / grid_size.y) * grid_size.y
+#
+	## Draw vertical lines
+	#for x in range(start_x, end_x, grid_size.x):
+		#draw_line(Vector2(x, start_y), Vector2(x, end_y), line_color, line_width)
+	#
+	## Draw horizontal lines
+	#for y in range(start_y, end_y, grid_size.y):
+		#draw_line(Vector2(start_x, y), Vector2(end_x, y), line_color, line_width)

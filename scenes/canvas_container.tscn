@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://c18yay2mbas18"]
 
-[ext_resource type="Texture2D" uid="uid://c7r7lk7b3kp6s" path="res://assets/info.png" id="1_2o1cn"]
-[ext_resource type="Script" path="res://scripts/canvas_controller.gd" id="1_fh8k3"]
-[ext_resource type="Script" path="res://scripts/camera_controller.gd" id="2_jfmxq"]
+[ext_resource type="Script" uid="uid://b58h0o80yex88" path="res://scripts/canvas_controller.gd" id="1_fh8k3"]
+[ext_resource type="Script" uid="uid://dpieo3lmcbwvr" path="res://scripts/camera_controller.gd" id="2_jfmxq"]
+[ext_resource type="Script" uid="uid://gd1680e2oeq8" path="res://scripts/stroke_manager.gd" id="3_bhxw4"]
 
 [node name="CanvasContainer" type="Node2D"]
 script = ExtResource("1_fh8k3")
@@ -12,8 +12,7 @@ position = Vector2(579, 327)
 script = ExtResource("2_jfmxq")
 panSpeed = 5
 
-[node name="Info" type="Sprite2D" parent="."]
-position = Vector2(97, 132)
-texture = ExtResource("1_2o1cn")
+[node name="strokeManager" type="Node2D" parent="."]
+script = ExtResource("3_bhxw4")
 
-[node name="drawingNode" type="Node2D" parent="."]
+[node name="tileManager" type="Node2D" parent="."]

@@ -1,6 +1,7 @@
-[gd_scene load_steps=18 format=3 uid="uid://6yhsdjs658bw"]
+[gd_scene load_steps=19 format=3 uid="uid://6yhsdjs658bw"]
 
 [ext_resource type="Texture2D" uid="uid://dv2ec6brr365e" path="res://assets/menu-burger.png" id="1_4yc7i"]
+[ext_resource type="Script" uid="uid://bap3rwp3w1rtd" path="res://scripts/main_ui.gd" id="1_j03cv"]
 [ext_resource type="Texture2D" uid="uid://dk5hl350lxuua" path="res://assets/lock.png" id="2_nqlxj"]
 [ext_resource type="Texture2D" uid="uid://dtrherwebgh06" path="res://assets/hand-paper.png" id="3_im5gw"]
 [ext_resource type="Texture2D" uid="uid://burd0r7mu1mob" path="res://assets/cursor.png" id="4_ernbd"]
@@ -25,6 +26,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_j03cv")
 metadata/_edit_lock_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -228,6 +230,25 @@ texture_normal = ExtResource("15_dl3nv")
 ignore_texture_size = true
 stretch_mode = 5
 flip_h = true
+
+[node name="renderCalls" type="PanelContainer" parent="MarginContainer/bottomStrip/leftSideControls"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/bottomStrip/leftSideControls/renderCalls"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/bottomStrip/leftSideControls/renderCalls/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MarginContainer/bottomStrip/leftSideControls/renderCalls/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Re-render calls : "
 
 [node name="uselessNode" type="Control" parent="MarginContainer/bottomStrip"]
 layout_mode = 2

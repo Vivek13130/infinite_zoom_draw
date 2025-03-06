@@ -1,4 +1,13 @@
 extends Camera2D
+#Responsibility : 
+#control zoom in and out with limits
+#panning via w , a , s, d
+#click and drag
+
+@export var updateCanvasDynamically = false 
+
+@onready var canvas_container: Node2D = $".."
+@onready var stroke_manager: Node2D = $"../strokeManager"
 
 
 # zooming : 
@@ -29,7 +38,8 @@ func simple_zoom(delta):
 		zoomTarget *= 0.9
 	
 	zoom = zoom.slerp(zoomTarget, zoomSpeed * delta)
-
+	if updateCanvasDynamically:
+		stroke_manager.queue_redraw()
 
 func click_and_drag(delta):
 	if(!isDragging and Input.is_action_just_pressed("camera_dragging")):
@@ -44,7 +54,8 @@ func click_and_drag(delta):
 	if (isDragging and Input.is_action_just_released("camera_dragging")):
 		isDragging = false
 		
-		
+	if updateCanvasDynamically:
+		stroke_manager.queue_redraw()
 
 
 func simple_panning(delta):
@@ -60,3 +71,6 @@ func simple_panning(delta):
 		movement.y += panSpeed / zoom.x
 	
 	position += movement.normalized() * (1 / zoom.x) * delta * 200
+	
+	if updateCanvasDynamically:
+		stroke_manager.queue_redraw()
