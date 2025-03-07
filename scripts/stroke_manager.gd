@@ -2,8 +2,6 @@ extends Node2D
 
 # for strokes refer to Manager.strokes
 
- # stores all completed strokes with other info as well 
-# it is a list of dictionaries
 
 #list structure : [  - storing multiple dictionaries with stroke data 
 	#{
@@ -20,11 +18,9 @@ var previous_mouse_pos : Vector2 = Vector2.ZERO # just to check if mouse is at a
 
 var current_stroke_color = PackedColorArray() 
 
-
 func _process(_delta: float) -> void:
 	if(Manager.brush_type != "None"):
 		handleDrawing()
-	
 
 func handleDrawing():
 	var start_pos : Vector2
@@ -34,7 +30,7 @@ func handleDrawing():
 		var mouse_pos = camera.get_global_mouse_position()
 		# it should be taken in reference to camera 
 		start_pos = mouse_pos
-		#print("new start pos : ", start_pos)
+		print("new start pos : ", start_pos)
 		current_stroke.append(mouse_pos) 
 		previous_mouse_pos = mouse_pos
 	
@@ -57,36 +53,36 @@ func handleDrawing():
 			# now applying brush filters : 
 			#"Spiky Lines", "Bad Brush" , "Smooth" , "Ultra-Smooth", "None"
 			var brush_effect = Manager.brush_effect_type
-			print(current_stroke.size())
+			#print(current_stroke.size())
 			current_stroke = PackedVector2Array(current_stroke)
-			print(current_stroke.size())
-			print()
+			#print(current_stroke.size())
+			#print()
 			
 			var final_points  
-			print(brush_effect)
+			#print(brush_effect)
 			if(brush_effect == "None"):
 				final_points = current_stroke 
-				print("none")
+				#print("none")
 				
 			elif(brush_effect == "Spiky Lines"):
-				final_points = get_quadratic_bezier_points(current_stroke , 10)
-				print("Spiky Lines")
+				final_points = get_quadratic_bezier_points(current_stroke , 15)
+				#print("Spiky Lines")
 				
 			elif(brush_effect == "Bad Brush"):
 				final_points = get_quadratic_bezier_points(current_stroke , 1)
-				print("Bad Brush")
+				#print("Bad Brush")
 				
 			elif(brush_effect == "Smooth"):
-				final_points = get_catmull_rom_points(current_stroke , 20)
-				print("Smooth")
+				final_points = get_catmull_rom_points(current_stroke , 10)
+				#print("Smooth")
 				
 			elif (brush_effect == "Ultra-Smooth"):
 				final_points = get_catmull_rom_points(current_stroke, 100)
-				print("Ultra-Smooth")
+				#print("Ultra-Smooth")
 				
 			
 			#var smoothed_points = get_quadratic_bezier_points(current_stroke, curve_segments)
-			print(final_points.size())
+			Manager.total_points_stored += final_points.size()
 			var new_stroke = {
 				"stroke_points" : final_points, # we don't need any references of it
 				"stroke_color" : PackedColorArray([picked_color]),
@@ -94,6 +90,7 @@ func handleDrawing():
 			}
 			
 			Manager.strokes.append(new_stroke)
+			Manager.orderOfDrawing.append("Stroke")
 			Manager.update_canvas()
 
 
@@ -119,19 +116,14 @@ func _draw() -> void:
 		var final_points  
 		if(brush_effect == "None"):
 			final_points = current_stroke
-			print(1) 
 		elif(brush_effect == "Spiky Lines"):
 			final_points = get_quadratic_bezier_points(current_stroke , 10)
-			print(2)
 		elif(brush_effect == "Bad Brush"):
 			final_points = get_quadratic_bezier_points(current_stroke , 1)
-			print(3)
 		elif(brush_effect == "Smooth"):
 			final_points = get_catmull_rom_points(current_stroke , 20)
-			print(4)
 		elif (brush_effect == "Ultra-Smooth"):
 			final_points = get_catmull_rom_points(current_stroke, 200)
-			print(5)
 		
 		draw_polyline_colors(final_points, PackedColorArray([picked_color]), stroke_width / camera.zoom.x, true)
 	

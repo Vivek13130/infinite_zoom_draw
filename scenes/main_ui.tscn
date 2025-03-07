@@ -1,14 +1,12 @@
-[gd_scene load_steps=19 format=3 uid="uid://6yhsdjs658bw"]
+[gd_scene load_steps=17 format=3 uid="uid://6yhsdjs658bw"]
 
 [ext_resource type="Script" uid="uid://bap3rwp3w1rtd" path="res://scripts/main_ui.gd" id="1_j03cv"]
 [ext_resource type="Texture2D" uid="uid://bkewnc06n7riy" path="res://assets/square.png" id="5_04ii5"]
 [ext_resource type="Texture2D" uid="uid://cdl3s1tdvf5ws" path="res://assets/circle.png" id="6_2dtwi"]
 [ext_resource type="Texture2D" uid="uid://x53t3ihwvfnc" path="res://assets/slash.png" id="8_oy4xx"]
 [ext_resource type="Texture2D" uid="uid://y61g54udgkih" path="res://assets/attribution-pencil.png" id="9_3soa0"]
-[ext_resource type="Texture2D" uid="uid://dmtn2yny37wsx" path="res://assets/triangle (2).png" id="10_u04fh"]
 [ext_resource type="Texture2D" uid="uid://bnp204p6yaeh8" path="res://assets/add-image.png" id="10_uqbw1"]
 [ext_resource type="Texture2D" uid="uid://bjetncpeahfvl" path="res://assets/eraser.png" id="11_2k2lt"]
-[ext_resource type="Texture2D" uid="uid://ctf2505os11ew" path="res://assets/marker.png" id="13_u04fh"]
 [ext_resource type="Texture2D" uid="uid://d0jpi3mttqj2r" path="res://assets/minus-small.png" id="13_x0frv"]
 [ext_resource type="Texture2D" uid="uid://gj4i2rxsxy8y" path="res://assets/particle (1).png" id="14_ulqfl"]
 [ext_resource type="Texture2D" uid="uid://dmng7v75ost36" path="res://assets/plus.png" id="14_xr872"]
@@ -56,35 +54,79 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 10
 
-[node name="bottomStrip" type="HBoxContainer" parent="MarginContainer"]
+[node name="bottomStrip" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 mouse_filter = 0
+theme_override_constants/separation = 10
 
-[node name="leftSideControls" type="HBoxContainer" parent="MarginContainer/bottomStrip"]
+[node name="performanceInfo" type="VBoxContainer" parent="MarginContainer/bottomStrip"]
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_constants/separation = 30
+size_flags_vertical = 4
 
-[node name="renderCalls" type="PanelContainer" parent="MarginContainer/bottomStrip/leftSideControls"]
+[node name="FPS" type="PanelContainer" parent="MarginContainer/bottomStrip/performanceInfo"]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 8
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/bottomStrip/leftSideControls/renderCalls"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/bottomStrip/performanceInfo/FPS"]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/bottomStrip/leftSideControls/renderCalls/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/bottomStrip/performanceInfo/FPS/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="Label" type="Label" parent="MarginContainer/bottomStrip/leftSideControls/renderCalls/MarginContainer/HBoxContainer"]
+[node name="fpsLabel" type="Label" parent="MarginContainer/bottomStrip/performanceInfo/FPS/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "FPS : "
+
+[node name="renderCalls" type="PanelContainer" parent="MarginContainer/bottomStrip/performanceInfo"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/bottomStrip/performanceInfo/renderCalls"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/bottomStrip/performanceInfo/renderCalls/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="renderCallsLabel" type="Label" parent="MarginContainer/bottomStrip/performanceInfo/renderCalls/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "Re-render calls : "
+
+[node name="totalPointsInStorage" type="PanelContainer" parent="MarginContainer/bottomStrip/performanceInfo"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/bottomStrip/performanceInfo/totalPointsInStorage"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/bottomStrip/performanceInfo/totalPointsInStorage/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="totalStorageLabel" type="Label" parent="MarginContainer/bottomStrip/performanceInfo/totalPointsInStorage/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Total Points Stored : "
+
+[node name="leftSideControls" type="HBoxContainer" parent="MarginContainer/bottomStrip"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 30
 
 [node name="undoRedo" type="PanelContainer" parent="MarginContainer/bottomStrip/leftSideControls"]
 layout_mode = 2
@@ -160,6 +202,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_rbpqj")
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/drawingToolsContainer"]
 layout_mode = 2
+mouse_filter = 0
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
@@ -167,6 +210,7 @@ theme_override_constants/margin_bottom = 10
 
 [node name="MainContainer" type="VBoxContainer" parent="MarginContainer/drawingToolsContainer/MarginContainer"]
 layout_mode = 2
+mouse_filter = 0
 theme_override_constants/separation = 10
 
 [node name="BrushTools" type="VBoxContainer" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer"]
@@ -179,15 +223,12 @@ text = "Brushes : "
 [node name="brushesDropDown" type="OptionButton" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
 layout_mode = 2
 selected = 0
-item_count = 3
+item_count = 2
 popup/item_0/text = "Pencil"
 popup/item_0/icon = ExtResource("9_3soa0")
 popup/item_0/id = 0
-popup/item_1/text = "Highlighter"
-popup/item_1/icon = ExtResource("13_u04fh")
+popup/item_1/text = "NONE"
 popup/item_1/id = 1
-popup/item_2/text = "NONE"
-popup/item_2/id = 2
 
 [node name="Label4" type="Label" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
 layout_mode = 2
@@ -269,25 +310,22 @@ text = "Shape : "
 
 [node name="shapesDropDown" type="OptionButton" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
 layout_mode = 2
-selected = 5
-item_count = 6
-popup/item_0/text = "Triangle"
-popup/item_0/icon = ExtResource("10_u04fh")
+selected = 4
+item_count = 5
+popup/item_0/text = "Square"
+popup/item_0/icon = ExtResource("5_04ii5")
 popup/item_0/id = 0
-popup/item_1/text = "Square"
-popup/item_1/icon = ExtResource("5_04ii5")
+popup/item_1/text = "Line"
+popup/item_1/icon = ExtResource("8_oy4xx")
 popup/item_1/id = 1
-popup/item_2/text = "Line"
-popup/item_2/icon = ExtResource("8_oy4xx")
+popup/item_2/text = "Circle"
+popup/item_2/icon = ExtResource("6_2dtwi")
 popup/item_2/id = 2
-popup/item_3/text = "Circle"
-popup/item_3/icon = ExtResource("6_2dtwi")
+popup/item_3/text = "Rectangle"
+popup/item_3/icon = ExtResource("5_04ii5")
 popup/item_3/id = 3
-popup/item_4/text = "Rectangle"
-popup/item_4/icon = ExtResource("5_04ii5")
+popup/item_4/text = "NONE"
 popup/item_4/id = 4
-popup/item_5/text = "NONE"
-popup/item_5/id = 5
 
 [node name="Label3" type="Label" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
 layout_mode = 2
@@ -323,24 +361,29 @@ text = "Spawn Density :"
 
 [node name="spawnDensitySlider" type="HSlider" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
 layout_mode = 2
+min_value = 1.0
 value = 50.0
 
 [node name="HSeparator4" type="HSeparator" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer"]
+visible = false
 layout_mode = 2
 theme_override_styles/separator = SubResource("StyleBoxFlat_hst8y")
 
 [node name="GridContainer" type="GridContainer" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 10
 columns = 3
 
 [node name="TextureButton9" type="TextureButton" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/GridContainer"]
+visible = false
 layout_mode = 2
 texture_normal = ExtResource("10_uqbw1")
 stretch_mode = 5
 
 [node name="TextureButton10" type="TextureButton" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/GridContainer"]
+visible = false
 layout_mode = 2
 texture_normal = ExtResource("11_2k2lt")
 stretch_mode = 5
@@ -349,6 +392,10 @@ stretch_mode = 5
 visible = false
 layout_mode = 0
 
+[connection signal="pressed" from="MarginContainer/bottomStrip/leftSideControls/undoRedo/MarginContainer/HBoxContainer/TextureButton2" to="." method="_on_undo_button_pressed"]
+[connection signal="pressed" from="MarginContainer/bottomStrip/leftSideControls/undoRedo/MarginContainer/HBoxContainer/TextureButton" to="." method="_on_redo_button_pressed"]
+[connection signal="mouse_entered" from="MarginContainer/drawingToolsContainer" to="." method="_on_drawing_tools_container_mouse_entered"]
+[connection signal="mouse_exited" from="MarginContainer/drawingToolsContainer" to="." method="_on_drawing_tools_container_mouse_exited"]
 [connection signal="item_selected" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushesDropDown" to="." method="_on_brushes_drop_down_item_selected"]
 [connection signal="item_selected" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushEffectDropDown" to="." method="_on_brush_effect_drop_down_item_selected"]
 [connection signal="value_changed" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushSizeSlider" to="." method="_on_brush_size_value_changed"]
