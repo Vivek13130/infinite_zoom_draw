@@ -9,6 +9,7 @@ extends Camera2D
 @onready var canvas_container: Node2D = $".."
 @onready var stroke_manager: Node2D = $"../strokeManager"
 
+const zoom_in_limit = 2 * 10e7
 
 # zooming : 
 var zoomTarget : Vector2
@@ -36,6 +37,9 @@ func simple_zoom(delta):
 		zoomTarget *= 1.1
 	if Input.is_action_just_pressed("camera_zoom_out"):
 		zoomTarget *= 0.9
+	
+	zoomTarget.x = clamp(zoomTarget.x, 0 , zoom_in_limit)
+	zoomTarget.y = clamp(zoomTarget.y, 0 , zoom_in_limit)
 	
 	zoom = zoom.slerp(zoomTarget, zoomSpeed * delta)
 	if updateCanvasDynamically:

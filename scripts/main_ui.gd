@@ -6,15 +6,37 @@ extends Control
 @onready var picked_color_rect: ColorRect = $MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ColorPicker/ColorPickerButton/ColorRect
 
 
+@onready var zoom_level: Label = $MarginContainer/bottomStrip/leftSideControls/zoomControls/MarginContainer/HBoxContainer/zoomLevel
+
+
+@onready var brush_size_slider: HSlider = $MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushSizeSlider
+@onready var brush_transparency_slider: HSlider = $MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushTransparencySlider
 @onready var brushes_drop_down: OptionButton = $MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushesDropDown
 @onready var brush_effect_drop_down: OptionButton = $MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushEffectDropDown
 
+
 @onready var shapes_drop_down: OptionButton = $MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools/shapesDropDown
 @onready var shape_effect_drop_down: OptionButton = $MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools/shapeEffectDropDown
+@onready var sppawn_radius_slider: HSlider = $MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools/sppawnRadiusSlider
+@onready var spawn_density_slider: HSlider = $MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools/spawnDensitySlider
 
+func _ready() -> void:
+	# updating the current state in manager of brush and shapes 
+	Manager.brush_type = Manager.brushes_available[brushes_drop_down.get_selected_id()]
+	Manager.brush_size = brush_size_slider.value
+	Manager.brush_transparency = brush_transparency_slider.value 
+	Manager.brush_effect_type = Manager.brush_effect_available[brush_effect_drop_down.get_selected_id()]
+	
+	Manager.shape_type = Manager.shapes_available[shapes_drop_down.get_selected_id()]
+	Manager.shape_effect_type = Manager.shape_effects_available[shape_effect_drop_down.get_selected_id()]
+	Manager.shape_spawn_density = spawn_density_slider.value
+	Manager.shape_spawn_radius = sppawn_radius_slider.value
+	
 
 func _process(_delta: float) -> void:
 	label.text = "Re-render calls : " + str(Manager.queue_redraw_calls)
+	zoom_level.text = str(int(Manager.zoom_level.x * 100)) + "%"
+	
 	if(Manager.picked_color != Manager.new_picked_color):
 		color_picker_container.visible = false 
 		# hiding it because new color is picked 
@@ -33,20 +55,34 @@ func _on_brushes_drop_down_item_selected(index: int) -> void:
 	print("new brush selected : ", Manager.brush_type)
 	# no shapes , no extra effects  
 	shapes_drop_down.select(Manager.shapes_available.size() - 1)
-	shape_effect_drop_down.select(Manager.extra_effects_available.size()-1)
+	shape_effect_drop_down.select(Manager.shape_effects_available.size()-1)
+	if Manager.brush_type == "None" : 
+		brush_effect_drop_down.select(Manager.brush_effect_available.size()-1)
+		
+	
+func _on_brush_effect_drop_down_item_selected(index: int) -> void:
+	Manager.brush_effect_type = Manager.brush_effect_available[index]
+	print("new brush effect selected : ", Manager.brush_effect_type)
+	# no shapes , no extra effects  
+	shapes_drop_down.select(Manager.shapes_available.size() - 1)
+	shape_effect_drop_down.select(Manager.shape_effects_available.size()-1)
+	
+	if(Manager.brush_type == "None"):
+		Manager.brush_type = Manager.brushes_available[0]
+		brushes_drop_down.select(0)
 
 func _on_shapes_drop_down_item_selected(index: int) -> void:
 	Manager.shape_type = Manager.shapes_available[index]
 	print("new shape selected : ", Manager.shape_type)
 	brushes_drop_down.select(Manager.brushes_available.size()-1)
 	if(index == Manager.shapes_available.size()-1):
-		shape_effect_drop_down.select(Manager.extra_effects_available.size()-1)
+		shape_effect_drop_down.select(Manager.shape_effects_available.size()-1)
 
 
 
 func _on_shape_effect_drop_down_item_selected(index: int) -> void:
-	Manager.extra_effect_type = Manager.extra_effects_available[index]
-	print("new extra effect selected : ", Manager.extra_effect_type)
+	Manager.shape_effect_type = Manager.shape_effects_available[index]
+	print("new extra effect selected : ", Manager.shape_effect_type)
 	brushes_drop_down.select(Manager.brushes_available.size()-1)
 	
 	print(Manager.shape_type)
@@ -54,3 +90,19 @@ func _on_shape_effect_drop_down_item_selected(index: int) -> void:
 	if(shapes_drop_down.get_selected_id() == Manager.shapes_available.size()-1):
 		Manager.shape_type = Manager.shapes_available[0]
 		shapes_drop_down.select(0)
+
+
+func _on_brush_size_value_changed(value: float) -> void:
+	Manager.brush_size = value
+
+
+func _on_brush_transparency_value_changed(value: float) -> void:
+	Manager.brush_transparency = value
+
+
+func _on_spawn_radius_value_changed(value: float) -> void:
+	Manager.shape_spawn_radius = value
+
+
+func _on_spawn_density_value_changed(value: float) -> void:
+	Manager.shape_spawn_density = value

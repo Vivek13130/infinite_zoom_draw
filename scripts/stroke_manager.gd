@@ -1,9 +1,8 @@
 extends Node2D
 
+# for strokes refer to Manager.strokes
 
-var grid_size = Manager.grid_size # grid size in px 
-
-var strokes : Array = [] # stores all completed strokes with other info as well 
+ # stores all completed strokes with other info as well 
 # it is a list of dictionaries
 
 #list structure : [  - storing multiple dictionaries with stroke data 
@@ -14,28 +13,18 @@ var strokes : Array = [] # stores all completed strokes with other info as well
 	#}
 #]
 
-var curve_segments = 10
 
 var current_stroke = [] # stores the current stroke points 
 var previous_mouse_pos : Vector2 = Vector2.ZERO # just to check if mouse is at a new position
 @onready var camera: Camera2D = $"../Camera2D"
 
-@export var pencil_base_stroke_width = 20.0 
-@export var highlighter_base_stroke_width = 30.0
-@export var highlighter_color_transparency = 0.2
-
 var current_stroke_color = PackedColorArray() 
 
 
-
-
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if(Manager.brush_type != "None"):
 		handleDrawing()
 	
-	if(Manager.shape_type != "None"):
-		handleShapes()
-
 
 func handleDrawing():
 	var start_pos : Vector2
@@ -43,11 +32,11 @@ func handleDrawing():
 	if Input.is_action_just_pressed("click"): # started registering a new stroke 
 		current_stroke = [] # empty it out for a new stroke 
 		var mouse_pos = camera.get_global_mouse_position()
+		# it should be taken in reference to camera 
 		start_pos = mouse_pos
 		#print("new start pos : ", start_pos)
 		current_stroke.append(mouse_pos) 
 		previous_mouse_pos = mouse_pos
-		# it should be taken in reference to camera 
 	
 		
 	if Input.is_action_pressed("click") : # registering all points in stroke 
@@ -55,67 +44,100 @@ func handleDrawing():
 		if(current_mouse_pos != previous_mouse_pos):
 			current_stroke.append(current_mouse_pos)
 			previous_mouse_pos = current_mouse_pos
-			queue_redraw()
+			Manager.update_canvas()
 			
 	
 	if Input.is_action_just_released("click"): # pushing it in storage
 		
 		if current_stroke.size() > 1 : 
 			var picked_color = Color(Manager.picked_color) # creating a copy , no direct reference
-			var stroke_width
+			var stroke_width = Manager.brush_size 
+			picked_color.a = Manager.brush_transparency 
 			
-			if(Manager.brush_type == "Pencil"):
-				stroke_width = pencil_base_stroke_width
+			# now applying brush filters : 
+			#"Spiky Lines", "Bad Brush" , "Smooth" , "Ultra-Smooth", "None"
+			var brush_effect = Manager.brush_effect_type
+			print(current_stroke.size())
+			current_stroke = PackedVector2Array(current_stroke)
+			print(current_stroke.size())
+			print()
+			
+			var final_points  
+			print(brush_effect)
+			if(brush_effect == "None"):
+				final_points = current_stroke 
+				print("none")
 				
-			elif(Manager.brush_type == "Highlighter"):
-				picked_color.a = highlighter_color_transparency
-				stroke_width = highlighter_base_stroke_width
-				print(picked_color)
+			elif(brush_effect == "Spiky Lines"):
+				final_points = get_quadratic_bezier_points(current_stroke , 10)
+				print("Spiky Lines")
+				
+			elif(brush_effect == "Bad Brush"):
+				final_points = get_quadratic_bezier_points(current_stroke , 1)
+				print("Bad Brush")
+				
+			elif(brush_effect == "Smooth"):
+				final_points = get_catmull_rom_points(current_stroke , 20)
+				print("Smooth")
+				
+			elif (brush_effect == "Ultra-Smooth"):
+				final_points = get_catmull_rom_points(current_stroke, 100)
+				print("Ultra-Smooth")
+				
 			
 			#var smoothed_points = get_quadratic_bezier_points(current_stroke, curve_segments)
-			var smoothed_points = get_catmull_rom_points(current_stroke, curve_segments)
-			
+			print(final_points.size())
 			var new_stroke = {
-				"stroke_points" : smoothed_points, # we don't need any references of it
+				"stroke_points" : final_points, # we don't need any references of it
 				"stroke_color" : PackedColorArray([picked_color]),
 				"stroke_width" :  stroke_width / camera.zoom.x,
 			}
 			
-			strokes.append(new_stroke)
-			queue_redraw()
+			Manager.strokes.append(new_stroke)
+			Manager.update_canvas()
 
-
-func handleShapes() -> void : 
-	pass
 
 
 func _draw() -> void:
 	Manager.queue_redraw_calls += 1
 	
-	for stroke in strokes: # drawing all strokes in storage 
+	for stroke in Manager.strokes: # drawing all strokes in storage 
 		draw_polyline_colors(stroke["stroke_points"], stroke["stroke_color"] , stroke["stroke_width"], true)
 	
 	
 	# drawing the current stroke
 	if current_stroke.size() > 1 : 
-		var stroke_width
-		var picked_color = Color(Manager.picked_color)
-		
-		if(Manager.brush_type == "Pencil"):
-			stroke_width = pencil_base_stroke_width
+		var picked_color = Color(Manager.picked_color) # creating a copy , no direct reference
+		var stroke_width = Manager.brush_size 
+		picked_color.a = Manager.brush_transparency 
 			
-		elif(Manager.brush_type == "Highlighter"):
-			stroke_width = highlighter_base_stroke_width
-			picked_color.a = highlighter_color_transparency
+		# now applying brush filters : 
+		#"Spiky Lines", "Bad Brush" , "Smooth" , "Ultra-Smooth", "None"
+		var brush_effect = Manager.brush_effect_type
+		current_stroke = PackedVector2Array(current_stroke)
+			
+		var final_points  
+		if(brush_effect == "None"):
+			final_points = current_stroke
+			print(1) 
+		elif(brush_effect == "Spiky Lines"):
+			final_points = get_quadratic_bezier_points(current_stroke , 10)
+			print(2)
+		elif(brush_effect == "Bad Brush"):
+			final_points = get_quadratic_bezier_points(current_stroke , 1)
+			print(3)
+		elif(brush_effect == "Smooth"):
+			final_points = get_catmull_rom_points(current_stroke , 20)
+			print(4)
+		elif (brush_effect == "Ultra-Smooth"):
+			final_points = get_catmull_rom_points(current_stroke, 200)
+			print(5)
 		
-		#var smoothed_points = get_quadratic_bezier_points(current_stroke, curve_segments)
-		var smoothed_points = get_catmull_rom_points(current_stroke, curve_segments)
-		draw_polyline(smoothed_points, picked_color, stroke_width / camera.zoom.x, true)
-		#draw_polyline_colors(current_stroke, PackedColorArray([picked_color]) , stroke_width / camera.zoom.x, true)
-	
+		draw_polyline_colors(final_points, PackedColorArray([picked_color]), stroke_width / camera.zoom.x, true)
 	
 
-
+# it will generate spike lines at 20 segments 
+# it will generate bad brush at 1 segment 
 func get_quadratic_bezier_points(points: PackedVector2Array, segments : int) -> PackedVector2Array:
 	var bezier_points = PackedVector2Array()
 	for i in range(1, points.size() - 1):
@@ -131,39 +153,9 @@ func get_quadratic_bezier_points(points: PackedVector2Array, segments : int) -> 
 			bezier_points.append(point)
 	return bezier_points
 
-
+# smooth at 20 segments
+# ultra smooth at 200 segments but slower to process.
 func get_catmull_rom_points(points: PackedVector2Array, segments: int ) -> PackedVector2Array:
-	var smoothed_points = PackedVector2Array()
-	for i in range(points.size() - 1):
-		var p0 = points[max(i - 1, 0)]
-		var p1 = points[i]
-		var p2 = points[i + 1]
-		var p3 = points[min(i + 2, points.size() - 1)]
-
-		for t in range(segments + 1):
-			var t_norm = float(t) / float(segments)
-			var t2 = t_norm * t_norm
-			var t3 = t2 * t_norm
-
-			var x = 0.5 * (
-				2.0 * p1.x +
-				(-p0.x + p2.x) * t_norm +
-				(2.0 * p0.x - 5.0 * p1.x + 4.0 * p2.x - p3.x) * t2 +
-				(-p0.x + 3.0 * p1.x - 3.0 * p2.x + p3.x) * t3
-			)
-
-			var y = 0.5 * (
-				2.0 * p1.y +
-				(-p0.y + p2.y) * t_norm +
-				(2.0 * p0.y - 5.0 * p1.y + 4.0 * p2.y - p3.y) * t2 +
-				(-p0.y + 3.0 * p1.y - 3.0 * p2.y + p3.y) * t3
-			)
-
-			smoothed_points.append(Vector2(x, y))
-	return smoothed_points
-
-
-func get_catmull_rom_points_improved(points: PackedVector2Array, segments: int ) -> PackedVector2Array:
 	var smoothed_points = PackedVector2Array()
 	
 	for i in range(points.size() - 1):
@@ -195,7 +187,7 @@ func get_catmull_rom_points_improved(points: PackedVector2Array, segments: int )
 	
 	return smoothed_points
 
-
+# this is not used anywhere at present, but it provides more fine grained control.
 func get_cubic_bezier_points(points: PackedVector2Array, segments: int) -> PackedVector2Array:
 	var bezier_points = PackedVector2Array()
 

@@ -5,10 +5,10 @@
 
 [node name="main" type="Node2D"]
 
-[node name="CanvasContainer" parent="." instance=ExtResource("2_gmykr")]
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="mainUI" parent="CanvasLayer" instance=ExtResource("1_1p533")]
 z_index = 999
 mouse_filter = 0
+
+[node name="CanvasContainer" parent="." instance=ExtResource("2_gmykr")]

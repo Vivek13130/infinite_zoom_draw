@@ -138,7 +138,7 @@ texture_normal = ExtResource("13_x0frv")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Label" type="Label" parent="MarginContainer/bottomStrip/leftSideControls/zoomControls/MarginContainer/HBoxContainer"]
+[node name="zoomLevel" type="Label" parent="MarginContainer/bottomStrip/leftSideControls/zoomControls/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
@@ -195,16 +195,16 @@ text = "Brush Effects :  "
 
 [node name="brushEffectDropDown" type="OptionButton" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
 layout_mode = 2
-selected = 4
+selected = 2
 item_count = 5
-popup/item_0/text = "Spiky lines"
-popup/item_0/id = 1
-popup/item_1/text = "bad brush"
-popup/item_1/id = 2
-popup/item_2/text = "Smooth-bezier"
-popup/item_2/id = 3
-popup/item_3/text = "Smooth-catmull-rom"
-popup/item_3/id = 4
+popup/item_0/text = "Spiky Lines"
+popup/item_0/id = 0
+popup/item_1/text = "Bad Brush"
+popup/item_1/id = 1
+popup/item_2/text = "Smooth"
+popup/item_2/id = 2
+popup/item_3/text = "Ultra-Smooth"
+popup/item_3/id = 3
 popup/item_4/text = "NONE"
 popup/item_4/id = 4
 
@@ -212,17 +212,21 @@ popup/item_4/id = 4
 layout_mode = 2
 text = "Brush Size :"
 
-[node name="HSlider2" type="HSlider" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
+[node name="brushSizeSlider" type="HSlider" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
 layout_mode = 2
+min_value = 1.0
+max_value = 50.0
+value = 5.0
 
 [node name="Label6" type="Label" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
 layout_mode = 2
-text = "Brush Transparency:"
+text = "Brush Opacity:"
 
-[node name="HSlider3" type="HSlider" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
+[node name="brushTransparencySlider" type="HSlider" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools"]
 layout_mode = 2
 max_value = 1.0
 step = 0.01
+value = 1.0
 ticks_on_borders = true
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer"]
@@ -309,15 +313,17 @@ popup/item_3/id = 3
 layout_mode = 2
 text = "Spawn Radius :"
 
-[node name="HSlider" type="HSlider" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
+[node name="sppawnRadiusSlider" type="HSlider" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
 layout_mode = 2
+value = 50.0
 
 [node name="Label4" type="Label" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
 layout_mode = 2
 text = "Spawn Density :"
 
-[node name="HSlider2" type="HSlider" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
+[node name="spawnDensitySlider" type="HSlider" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools"]
 layout_mode = 2
+value = 50.0
 
 [node name="HSeparator4" type="HSeparator" parent="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer"]
 layout_mode = 2
@@ -344,7 +350,11 @@ visible = false
 layout_mode = 0
 
 [connection signal="item_selected" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushesDropDown" to="." method="_on_brushes_drop_down_item_selected"]
-[connection signal="item_selected" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushEffectDropDown" to="." method="_on_brushes_drop_down_item_selected"]
+[connection signal="item_selected" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushEffectDropDown" to="." method="_on_brush_effect_drop_down_item_selected"]
+[connection signal="value_changed" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushSizeSlider" to="." method="_on_brush_size_value_changed"]
+[connection signal="value_changed" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/BrushTools/brushTransparencySlider" to="." method="_on_brush_transparency_value_changed"]
 [connection signal="pressed" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ColorPicker/ColorPickerButton" to="." method="_on_color_picker_button_pressed"]
 [connection signal="item_selected" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools/shapesDropDown" to="." method="_on_shapes_drop_down_item_selected"]
 [connection signal="item_selected" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools/shapeEffectDropDown" to="." method="_on_shape_effect_drop_down_item_selected"]
+[connection signal="value_changed" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools/sppawnRadiusSlider" to="." method="_on_spawn_radius_value_changed"]
+[connection signal="value_changed" from="MarginContainer/drawingToolsContainer/MarginContainer/MainContainer/ShapeTools/spawnDensitySlider" to="." method="_on_spawn_density_value_changed"]
